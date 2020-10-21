@@ -32,8 +32,11 @@ class ButtonFunction {
         // btton functionの設定
         leave_button.onclick = function () {
           // レコード変更
-          let kintoneRecodeEdit = new KintoneRecodeEdit;
-          kintoneRecodeEdit.recordEdit(id);
+          let kintoneRecodeEdit = new KintoneRecodeEdit(id);
+          kintoneRecodeEdit.leaveEdit();
+
+          // 時刻の自動入力
+          kintoneRecodeEdit.autoTimeEdit();
 
           // ページのロード
           window.location.reload();

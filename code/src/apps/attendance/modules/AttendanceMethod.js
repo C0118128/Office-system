@@ -14,8 +14,8 @@ class AttendanceMethod {
 
     // 時刻のsetter・計算メソッドの実行 ------------------------------------------------------
     setTime(attendance_time, leave_time){
-        this.attendance_time = moment(attendance_time, 'HH:mm');
-        this.leave_time = moment(leave_time, 'HH:mm');
+        this.attendance_time = attendance_time;
+        this.leave_time = leave_time;
         this.total_working_hours = this.calculationTotalWorkingHours();
         this.break_time = this.calculationBreakTime();
     }

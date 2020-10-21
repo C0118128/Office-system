@@ -1,5 +1,4 @@
 import KintoneRecordManager from '@/modules/recordManager';
-import AttendanceMethod from './modules/AttendanceMethod';
 import moment from 'moment';
 import ButtonFunction from './modules/ButtonFunction';
 
