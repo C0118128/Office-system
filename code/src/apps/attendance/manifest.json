@@ -1,0 +1,14 @@
+{
+    "app": "29",
+    "scope": "ALL",
+    "desktop": {
+        "js": [
+            "./public/js/attendance.js"
+        ],
+        "css": []
+    },
+    "mobile": {
+        "js": [],
+        "css": []
+    }
+}

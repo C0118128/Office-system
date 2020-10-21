@@ -1,0 +1,7 @@
+_plugins
+.venv
+Pipfile.lock
+.env
+upload.sh
+node_modules
+package-lock.json
