@@ -1,5 +1,6 @@
 import KintoneRecordManager from '@/modules/recordManager';
 import AttendanceMethod from './modules/AttendanceMethod';
+import moment from 'moment';
 
 'use strict';
 
@@ -11,76 +12,51 @@ const ev_index = 'app.record.index.show'; // 一覧ページ表示の際
 const events_value_edit = ['app.record.create.show','app.record.edit.show','app.record.index.edit.show',
 'app.record.edit.change.attendanceTime','app.record.create.change.attendanceTime','app.record.index.edit.change.attendanceTime',
 'app.record.edit.change.leaveTime','app.record.create.change.leaveTime','app.record.index.edit.change.leaveTime']; // Editting attendanceTime or leaveTime 
-const ev_all = ['app.record.index.show','app.record.detail.show','app.record.create.show','app.record.edit.show','app.record.index.edit.show'];
+
 
 // ##########################################
-// 一覧ページで実行
+// 書くイベント発生時に実行
 // ##########################################
-kintone.events.on(events_value_edit, function(event) {
-  let record = event.record;
-  let attendance_method = new AttendanceMethod;
 
-  // 時刻の取得 -------------------------------------------------------------------
-  // console.log('時刻の取得');
 
-  let attendance_time = record['attendanceTime']['value'];
-  let leave_time = record['leaveTime']['value']; 
-
-  // console.log('success');
-
-  // 時刻をsetterに代入・計算 ------------------------------------------------------
-  // console.log('時刻をsetterに代入・計算');
-
-  attendance_method.setTime(attendance_time, leave_time);
-
-  // console.log('success');
-
-  // getterで時刻を取得 -----------------------------------------------------------
-  // console.log('getterで時刻を取得');
-
-  let total_working_hours = attendance_method.getTotalWorkingHours();
-  let break_time = attendance_method.getBreakTime();
-
-  // console.log('success');
-
-  // 時刻をkintoneに表示 ----------------------------------------------------------
-  // console.log('時刻をkintoneに表示');
-
-  record['totalWorkingHours']['value'] = total_working_hours;
-  record['breakTime']['value'] = break_time;
-
-  // console.log('success');
-
-  return event;
-});
-
-// kintone.events.on(ev_detail, function(event) {
+// kintone.events.on(events_value_edit, function(event) {
 //   let record = event.record;
+//   let attendance_method = new AttendanceMethod;
 
-//-------------------------------------------------------------------
+//   // 時刻の取得 -------------------------------------------------------------------
+//   // console.log('時刻の取得');
 
-  // // 詳細を開くとリモートに
-  // var body = {
-  //   'app': kintone.app.getId(),
-  //   'id': kintone.app.record.getId(),
-  //   'record': {
-  //     'workStyle': {
-  //       'value': 'リモート'
-  //     }
-  //   }
-  // };
-  
-  // kintone.api(kintone.api.url('/k/v1/record', true), 'PUT', body, function(resp) {
-  //   // success
-  //   console.log(resp);
-  // }, function(error) {
-  //   // error
-  //   console.log(error);
-  // });
+//   let attendance_time = record['attendanceTime']['value'];
+//   let leave_time = record['leaveTime']['value']; 
 
+//   // console.log('success');
+
+//   // 時刻をsetterに代入・計算 ------------------------------------------------------
+//   // console.log('時刻をsetterに代入・計算');
+
+//   attendance_method.setTime(attendance_time, leave_time);
+
+//   // console.log('success');
+
+//   // getterで時刻を取得 -----------------------------------------------------------
+//   // console.log('getterで時刻を取得');
+
+//   let total_working_hours = attendance_method.getTotalWorkingHours();
+//   let break_time = attendance_method.getBreakTime();
+
+//   // console.log('success');
+
+//   // 時刻をkintoneに表示 ----------------------------------------------------------
+//   // console.log('時刻をkintoneに表示');
+
+//   record['totalWorkingHours']['value'] = total_working_hours;
+//   record['breakTime']['value'] = break_time;
+
+//   // console.log('success');
 
 //   return event;
 // });
+
 
 kintone.events.on(ev_index, function(event) {
   let record = event.record;
@@ -113,17 +89,19 @@ kintone.events.on(ev_index, function(event) {
       let c = b[0].getElementsByTagName('span');
       // console.log(b[0]);
       let id = c[0].innerText;
-      console.log("id= " + id);
+      //console.log("id= " + id);
 
       linkSpaceFieldButton.onclick = function () {
+        let tmp = moment().format('HH:mm');
+        console.log(typeof(tmp));
       
         // 詳細を開くとリモートに
         var body = {
           'app': kintone.app.getId(),
           'id': id,
           'record': {
-            'workStyle': {
-              'value': '出社'
+            'leaveTime': {
+              'value': tmp
             }
           }
         };
@@ -137,7 +115,6 @@ kintone.events.on(ev_index, function(event) {
         });
   
         window.location.reload();
-        window.alert('退勤');
       };
 
       count++;
